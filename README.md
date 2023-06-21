@@ -26,7 +26,7 @@ Tech used: GraphQL, Node.js, Express.js, AWS EC2, AWS DynamoDB, Terraform
 So far, there is simply a baseline of tables for the API, for future projects - more thought could be given to what each table needs ahead of time rather than before. 
 
 # Lessons Learned:
-So far, the most important lesson I've learned is to properly keep track of key pairs as an instance is creatred - having to create a new instance because the inital pair was not downloaded added a lot of extra time. 
+So far, the most important lesson I've learned is to properly keep track of key pairs as an instance is created - having to create a new instance because the inital pair was not downloaded added a lot of extra time. 
 
 
 
