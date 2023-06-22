@@ -22,7 +22,7 @@ const getUserById = async (id) => {
    }
 }
 
-const getDeliveryById = async (id) -> {
+const getDeliveryById = async (id) => {
    const params = {
       TableName: 'Deliveries',
       Item: {
@@ -31,7 +31,7 @@ const getDeliveryById = async (id) -> {
    };
    try {
       const data = await dynamodb.get(params).promise()
-      console.log('Delivery:' data.Item)
+      console.log('Delivery:', data.Item)
    } catch (error) {
       console.error('Error getting user', error)
    }
@@ -50,7 +50,7 @@ const createUser = async (user) => {
       await dynamodb.put(params).promise()
       console.log('User created successfully.')
    } catch (error) {
-      console.error("Error creating delivery:', error)
+      console.error('Error creating delivery:', error)
       }
    }
 
@@ -73,9 +73,14 @@ const createDelivery = async (delivery) => {
   
   // Call the functions as needed
   getUserById('01');
-   getDeliveryById('01')
-//   createDelivery({
-//     id: '456',
-//     description: 'Example delivery',
+  createUser({
+    id: '02',
+    bio: 'Example bio',
 
-//   });
+  });
+   getDeliveryById('456')
+  createDelivery({
+    id: '457',
+    description: 'Example delivery',
+
+  });
