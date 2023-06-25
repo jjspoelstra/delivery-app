@@ -7,35 +7,6 @@ AWS.config.update({ region: 'us-east-2' })
 const dynamodb = new AWS.DynamoDB.DocumentClient()
 
 //table for Users
-const getUserById = async (id) => {
-   const params = {
-    TableName: 'Users',
-    Key: {
-        id: Number(id), // Convert id to number
-      },
-   };
-   try {
-    const data = await dynamodb.get(params).promise()
-    console.log('User:', data.Item)
-   } catch (error) {
-    console.error('Error getting user', error)
-   }
-}
-
-const getDeliveryById = async (id) => {
-   const params = {
-      TableName: 'Deliveries',
-      Key: {
-         id: Number(id),
-      },
-   };
-   try {
-      const data = await dynamodb.get(params).promise()
-      console.log('Delivery:', data.Item)
-   } catch (error) {
-      console.error('Error getting user', error)
-   }
-}
 
 const createUser = async (user) => {
    const params = {
@@ -170,47 +141,129 @@ const createDelivery = async (delivery) => {
      console.error('Error deleting delivery:', error);
    }
  };
+
+ const listUsers = async () => {
+   const params = {
+     TableName: 'Users',
+   };
+ 
+   try {
+     const data = await dynamodb.scan(params).promise();
+     console.log('Users:', data.Items);
+   } catch (error) {
+     console.error('Error listing users:', error);
+   }
+ };
+ 
+ const listDeliveries = async () => {
+   const params = {
+     TableName: 'Deliveries',
+   };
+ 
+   try {
+     const data = await dynamodb.scan(params).promise();
+     console.log('Deliveries:', data.Items);
+   } catch (error) {
+     console.error('Error listing deliveries:', error);
+   }
+ };
+
+ const getUsersByCriteria = async (criteria) => {
+   const params = {
+     TableName: 'Users',
+     FilterExpression: '#attribute = :value',
+     ExpressionAttributeNames: {
+       '#attribute': criteria.attribute,
+     },
+     ExpressionAttributeValues: {
+       ':value': criteria.value,
+     },
+   };
+ 
+   try {
+     const data = await dynamodb.scan(params).promise();
+     console.log('Users:', data.Items);
+   } catch (error) {
+     console.error('Error getting users', error);
+   }
+ };
+ 
+ // Example usage:
+ 
+
+ const getDeliveriesByCriteria = async (criteria) => {
+   const params = {
+     TableName: 'Deliveries',
+     FilterExpression: '#attribute = :value',
+     ExpressionAttributeNames: {
+       '#attribute': criteria.attribute,
+     },
+     ExpressionAttributeValues: {
+       ':value': criteria.value,
+     },
+   };
+ 
+   try {
+     const data = await dynamodb.scan(params).promise();
+     console.log('Deliveries:', data.Items);
+   } catch (error) {
+     console.error('Error getting deliveries', error);
+   }
+ };
+ 
+ // Example usage:
+ 
+ 
   
   // Call the functions as needed
+
   //getUserById('02');
-  createUser({
-    id: '03',
-    name: 'Joe',
-    email: 'jjspoels@gmail.com',
-    address: '123 5th Street',
-    phone: '123-456-7890',
 
-  });
+//   createUser({
+//     id: '03',
+//     name: 'Joe',
+//     email: 'jjspoels@gmail.com',
+//     address: '123 5th Street',
+//     phone: '123-456-7890',
+//   });
+
    //getDeliveryById('457')
-  createDelivery({
-    id: '467',
-    description: 'Example delivery',
-    status: 'Pending',
-    delivery_address: '123 5th Street',
-    delivery_date: '6/28/2023',
-    recipient_id: '02',
-    notes: 'ring the doorbell',
-    cost: '54.55',
-   
-  });
+//   createDelivery({
+//     id: '467',
+//     description: 'Example delivery',
+//     status: 'Pending',
+//     delivery_address: '123 5th Street',
+//     delivery_date: '6/28/2023',
+//     recipient_id: '02',
+//     notes: 'ring the doorbell',
+//     cost: '54.55',
+//   });
+
+//   updateUser('02', {
+//    name: 'Updated Name',
+//    email: 'updated@example.com',
+//    address: '456 Main Street',
+//    phone: '987-654-3210',
+//  });
+
+//  updateDelivery('457', {
+//    description: 'Updated Description',
+//    status: 'In Progress',
+//    delivery_address: '456 Main Street',
+//    delivery_date: '6/30/2023',
+//    recipient_id: '03',
+//    notes: 'Leave package at front desk',
+//    cost: '65.00',
+//  });
+
+//  deleteUserById('01');
+
+// deleteDeliveryById('457');
+
+// listUsers();
+
+// listDeliveries();
 
 
-  updateUser('02', {
-   name: 'Updated Name',
-   email: 'updated@example.com',
-   address: '456 Main Street',
-   phone: '987-654-3210',
- });
-
- updateDelivery('457', {
-   description: 'Updated Description',
-   status: 'In Progress',
-   delivery_address: '456 Main Street',
-   delivery_date: '6/30/2023',
-   recipient_id: '03',
-   notes: 'Leave package at front desk',
-   cost: '65.00',
- });
-
- deleteUserById('01');
-deleteDeliveryById('457');
+getUsersByCriteria({ attribute: 'name', value: 'Joe' });
+getDeliveriesByCriteria({ attribute: 'status', value: 'Pending' });
