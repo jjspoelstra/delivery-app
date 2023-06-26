@@ -20,27 +20,68 @@ const createUser = async (user) => {
    try {
       await dynamodb.put(params).promise()
       console.log('User created successfully.')
+      return user
    } catch (error) {
-      console.error('Error creating delivery:', error)
+      console.error('Error creating user:', error)
       }
    }
 
-const createDelivery = async (delivery) => {
+
+   const createDelivery = async (delivery) => {
     const params = {
-      TableName: 'Deliveries',
-      Item: {
-        ...delivery,
-        id: Number(delivery.id), // Convert id to number
-      },
+       TableName: 'Deliveries',
+       Item: {
+          ...delivery,
+          id: Number(delivery.id), // Convert id to number
+       },
     };
-  
+ 
     try {
-      await dynamodb.put(params).promise();
-      console.log('Delivery created successfully.');
+       await dynamodb.put(params).promise();
+       console.log('Delivery created successfully.');
+       return delivery
     } catch (error) {
-      console.error('Error creating delivery:', error);
+       console.error('Error creating delivery:', error);
     }
+ };
+
+ const getUserById = async (id) => {
+  const params = {
+    TableName: 'Users',
+    Key: {
+      id: id,
+    },
   };
+
+  try {
+    const data = await dynamodb.get(params).promise();
+    console.log('User:', data.Item);
+    return data.Item;
+  } catch (error) {
+    console.error('Error getting user:', error);
+    throw error;
+  }
+  
+};
+
+const getDeliveryById = async (id) => {
+  const params = {
+    TableName: 'Deliveries',
+    Key: {
+      id: id,
+    },
+  };
+
+  try {
+    const data = await dynamodb.get(params).promise();
+    console.log('Delivery:', data.Item);
+    return data.Item;
+  } catch (error) {
+    console.error('Error getting user:', error);
+    throw error; // Throw the error after logging it
+  }
+  
+};
 
   //update the user
   const updateUser = async (id, updatedAttributes) => {
@@ -169,24 +210,26 @@ const createDelivery = async (delivery) => {
  };
 
  const getUsersByCriteria = async (criteria) => {
-   const params = {
-     TableName: 'Users',
-     FilterExpression: '#attribute = :value',
-     ExpressionAttributeNames: {
-       '#attribute': criteria.attribute,
-     },
-     ExpressionAttributeValues: {
-       ':value': criteria.value,
-     },
-   };
- 
-   try {
-     const data = await dynamodb.scan(params).promise();
-     console.log('Users:', data.Items);
-   } catch (error) {
-     console.error('Error getting users', error);
-   }
- };
+  const params = {
+    TableName: 'Users',
+    FilterExpression: '#attribute = :value',
+    ExpressionAttributeNames: {
+      '#attribute': criteria.attribute,
+    },
+    ExpressionAttributeValues: {
+      ':value': criteria.attribute === 'id' ? Number(criteria.value) : criteria.value,
+    },
+  };
+
+  try {
+    const data = await dynamodb.scan(params).promise();
+    console.log('Users:', data.Items);
+    return data.Items[0]; // Return only the first item
+  } catch (error) {
+    console.error('Error getting users', error);
+  }
+};
+
  
  // Example usage:
  
@@ -265,5 +308,25 @@ const createDelivery = async (delivery) => {
 // listDeliveries();
 
 
-getUsersByCriteria({ attribute: 'name', value: 'Joe' });
-getDeliveriesByCriteria({ attribute: 'status', value: 'Pending' });
+getUserById(3);
+// getDeliveryById(467);
+
+
+
+module.exports = {
+  createUser,
+  createDelivery,
+  getUserById,
+  getDeliveryById,
+  updateUser,
+  updateDelivery,
+  deleteUserById,
+  deleteDeliveryById,
+  listUsers,
+  listDeliveries,
+  getUsersByCriteria,
+  getDeliveriesByCriteria,
+};
+
+
+
