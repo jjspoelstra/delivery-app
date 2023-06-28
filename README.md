@@ -7,9 +7,9 @@ This project is meant to be a simple delivery app, to develop and practice skill
 
 3 - Create simple baseline read and create functions for the User and Delivery tables in DynamoDB to ensure connectivity. 
 
------- here
-
 4 - Finish adding all CRUD operations. This includes finalizing the kind of data we want stored in each table. 
+
+------ here
 
 5 - Implement GraphQL resolvers for basic operations. This includes operations like creating a new delivery, and marking a delivery as completed.
 
