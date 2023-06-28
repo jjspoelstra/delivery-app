@@ -216,19 +216,17 @@ const getDeliveryById = async (id) => {
     ExpressionAttributeNames: {
       '#attribute': criteria.attribute,
     },
-    ExpressionAttributeValues: {
-      ':value': criteria.attribute === 'id' ? Number(criteria.value) : criteria.value,
-    },
   };
 
   try {
     const data = await dynamodb.scan(params).promise();
     console.log('Users:', data.Items);
-    return data.Items[0]; // Return only the first item
+    return data.Items;
   } catch (error) {
     console.error('Error getting users', error);
   }
 };
+
 
  
  // Example usage:

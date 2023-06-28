@@ -17,8 +17,8 @@ const {
     Query: {
         user: async (_, { id }) => {
             console.log('Resolver function for user executed');
-            return { id: 3, name: 'Sample User', email: 'sample@example.com', address: '123 Main St', phone: '123-456-7890' };
-          },        
+            return getUserById(id);
+          },                  
       delivery: (_, { id }) => getDeliveryById(id),
       userByCriteria: (_, { criteria }) => getUsersByCriteria(criteria),
       deliveryByCriteria: (_, { criteria }) => getDeliveriesByCriteria(criteria),
