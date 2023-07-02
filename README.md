@@ -9,9 +9,9 @@ This project is meant to be a simple delivery app, to develop and practice skill
 
 4 - Finish adding all CRUD operations. This includes finalizing the kind of data we want stored in each table. 
 
------- here
-
 5 - Implement GraphQL resolvers for basic operations. This includes operations like creating a new delivery, and marking a delivery as completed.
+
+------ here
 
 6 - Since Kafka does not have a free tier, I will use Amazon SNS as a pub/sub messaging service - and implement the ability for real-time updates
 
