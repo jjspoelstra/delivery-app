@@ -13,25 +13,25 @@ const {
     getDeliveriesByCriteria
   } = require('./dynamodb');
   
-  const resolvers = {
-    Query: {
-        user: async (_, { id }) => {
-            console.log('Resolver function for user executed');
-            return getUserById(id);
-          },                  
-      delivery: (_, { id }) => getDeliveryById(id),
-      userByCriteria: (_, { criteria }) => getUsersByCriteria(criteria),
-      deliveryByCriteria: (_, { criteria }) => getDeliveriesByCriteria(criteria),
+const queries = {
+    user: async ({ id }) => {
+        console.log('Resolver function for user executed');
+        return getUserById(id);
     },
-    Mutation: {
-      createUser: (_, { user }) => createUser(user),
-      createDelivery: (_, { delivery }) => createDelivery(delivery),
-      updateUser: (_, { id, updatedAttributes }) => updateUser(id, updatedAttributes),
-      updateDelivery: (_, { id, updatedAttributes }) => updateDelivery(id, updatedAttributes),
-      deleteUserById: (_, { id }) => deleteUserById(id),
-      deleteDeliveryById: (_, { id }) => deleteDeliveryById(id),
-    },
-  };
-  
-  module.exports = resolvers;
-  
+    delivery: ({ id }) => getDeliveryById(id),
+    userByCriteria: ({ criteria }) => getUsersByCriteria(criteria),
+    deliveryByCriteria: ({ criteria }) => getDeliveriesByCriteria(criteria),
+};
+
+const mutations = {
+    createUser: ({ user }) => createUser(user),
+    createDelivery: ({ delivery }) => createDelivery(delivery),
+    // updateUser: ({ id, updatedAttributes }) => updateUser(id, updatedAttributes),
+    // updateDelivery: ({ id, updatedAttributes }) => updateDelivery(id, updatedAttributes),
+    deleteUserById: ({ id }) => deleteUserById(id),
+    deleteDeliveryById: ({ id }) => deleteDeliveryById(id),
+}
+
+const resolvers = { ...queries, ...mutations };
+
+module.exports = resolvers;

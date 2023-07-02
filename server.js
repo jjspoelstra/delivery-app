@@ -1,13 +1,8 @@
+
 const express = require('express');
 const cors = require('cors');
-
-
-
-
 const { graphqlHTTP } = require('express-graphql');
 const { buildSchema } = require('graphql');
-
-
 const resolvers = require('./resolvers');
 
 // Define your schema
@@ -22,8 +17,7 @@ const schema = buildSchema(`
   type Mutation {
     createUser(user: UserInput!): User
     createDelivery(delivery: DeliveryInput!): Delivery
-    updateUser(id: Int!, updatedAttributes: UserInput!): User
-    updateDelivery(id: Int!, updatedAttributes: DeliveryInput!): Delivery
+    
     deleteUserById(id: Int!): String
     deleteDeliveryById(id: Int!): String
   }
@@ -32,9 +26,6 @@ const schema = buildSchema(`
     id: Int
     name: String
     email: String
-    address: String
-    phone: String
-    # ... other fields
   }
 
   type Delivery {
@@ -76,20 +67,30 @@ const schema = buildSchema(`
   }
 `);
 
-// Create an Express server
+
+// // Create an Express server
+
 const app = express();
 app.use(cors());
-// Configure the GraphQL endpoint
 app.use(
   '/graphql',
   graphqlHTTP({
     schema: schema,
     rootValue: resolvers,
-    graphiql: true, // Enable GraphiQL interface for testing
+    graphiql: true,
+    customFormatErrorFn: (error) => {
+      console.log(error);
+      return error;
+    },
   })
 );
 
-// Start the server
 app.listen(4000, () => {
   console.log('Server is running on http://localhost:4000/graphql');
 });
+
+
+
+
+
+

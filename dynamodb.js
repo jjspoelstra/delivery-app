@@ -59,10 +59,11 @@ const createUser = async (user) => {
     return data.Item;
   } catch (error) {
     console.error('Error getting user:', error);
-    throw error;
+    return new Error(error);
   }
   
 };
+
 
 const getDeliveryById = async (id) => {
   const params = {
@@ -83,72 +84,73 @@ const getDeliveryById = async (id) => {
   
 };
 
-  //update the user
-  const updateUser = async (id, updatedAttributes) => {
-   const params = {
-     TableName: 'Users',
-     Key: {
-       id: Number(id),
-     },
-     UpdateExpression: 'SET #name = :name, #email = :email, #address = :address, #phone = :phone',
-     ExpressionAttributeNames: {
-       '#name': 'name',
-       '#email': 'email',
-       '#address': 'address',
-       '#phone': 'phone',
-     },
-     ExpressionAttributeValues: {
-       ':name': updatedAttributes.name,
-       ':email': updatedAttributes.email,
-       ':address': updatedAttributes.address,
-       ':phone': updatedAttributes.phone,
-     },
-     ReturnValues: 'ALL_NEW',
-   };
- 
-   try {
-     const data = await dynamodb.update(params).promise();
-     console.log('User updated successfully. New attributes:', data.Attributes);
-   } catch (error) {
-     console.error('Error updating user:', error);
-   }
- };
+  //update the user ----functions not working
+//   const updateUser = async (id, updatedAttributes) => {
+//     const { name, email, address, phone } = updatedAttributes;
+//     const params = {
+//       TableName: 'Users',
+//       Key: { id: Number(id) },
+//       UpdateExpression: 'SET #n = :name, email = :email, address = :address, phone = :phone',
+//       ExpressionAttributeNames: {
+//         '#n': 'name',
+//       },
+//       ExpressionAttributeValues: {
+//         ':name': name,
+//         ':email': email,
+//         ':address': address,
+//         ':phone': phone,
+//       },
+//       ReturnValues: 'ALL_NEW',
+//     };
+  
+//     try {
+//       const data = await dynamodb.update(params).promise();
+//       console.log('User updated successfully:', data.Attributes);
+//       return data.Attributes;
+//     } catch (error) {
+//       console.error('Error updating user:', error);
+//     }
+//   };
+  
+  
+  
+  
 
- const updateDelivery = async (id, updatedAttributes) => {
-   const params = {
-     TableName: 'Deliveries',
-     Key: {
-       id: Number(id),
-     },
-     UpdateExpression: 'SET #description = :description, #status = :status, #delivery_address = :deliveryAddress, #delivery_date = :deliveryDate, #recipient_id = :recipientId, #notes = :notes, #cost = :cost',
-     ExpressionAttributeNames: {
-       '#description': 'description',
-       '#status': 'status',
-       '#delivery_address': 'delivery_address',
-       '#delivery_date': 'delivery_date',
-       '#recipient_id': 'recipient_id',
-       '#notes': 'notes',
-       '#cost': 'cost',
-     },
-     ExpressionAttributeValues: {
-       ':description': updatedAttributes.description,
-       ':status': updatedAttributes.status,
-       ':deliveryAddress': updatedAttributes.delivery_address,
-       ':deliveryDate': updatedAttributes.delivery_date,
-       ':recipientId': updatedAttributes.recipient_id,
-       ':notes': updatedAttributes.notes,
-       ':cost': updatedAttributes.cost,
-     },
-     ReturnValues: 'ALL_NEW',
-   };
+//  const updateDelivery = async (id, updatedAttributes) => {
+//    const params = {
+//      TableName: 'Deliveries',
+//      Key: {
+//        id: Number(id),
+//      },
+//      UpdateExpression: 'SET #description = :description, #status = :status, #delivery_address = :deliveryAddress, #delivery_date = :deliveryDate, #recipient_id = :recipientId, #notes = :notes, #cost = :cost',
+//      ExpressionAttributeNames: {
+//        '#description': 'description',
+//        '#status': 'status',
+//        '#delivery_address': 'delivery_address',
+//        '#delivery_date': 'delivery_date',
+//        '#recipient_id': 'recipient_id',
+//        '#notes': 'notes',
+//        '#cost': 'cost',
+//      },
+//      ExpressionAttributeValues: {
+//        ':description': updatedAttributes.description,
+//        ':status': updatedAttributes.status,
+//        ':deliveryAddress': updatedAttributes.delivery_address,
+//        ':deliveryDate': updatedAttributes.delivery_date,
+//        ':recipientId': updatedAttributes.recipient_id,
+//        ':notes': updatedAttributes.notes,
+//        ':cost': updatedAttributes.cost,
+//      },
+//      ReturnValues: 'ALL_NEW',
+//    };
  
-   try {
-     const data = await dynamodb.update(params).promise();
-     console.log('Delivery updated successfully. New attributes:', data.Attributes);
-   } catch (error) {
-     console.error('Error updating delivery:', error);
-   }
- };
+//    try {
+//      const data = await dynamodb.update(params).promise();
+//      console.log('Delivery updated successfully. New attributes:', data.Attributes);
+//    } catch (error) {
+//      console.error('Error updating delivery:', error);
+//    }
+//  };
  
  const deleteUserById = async (id) => {
    const params = {
@@ -216,12 +218,15 @@ const getDeliveryById = async (id) => {
     ExpressionAttributeNames: {
       '#attribute': criteria.attribute,
     },
+    ExpressionAttributeValues: {
+      ':value': criteria.value,
+    },
   };
 
   try {
     const data = await dynamodb.scan(params).promise();
     console.log('Users:', data.Items);
-    return data.Items;
+    return data.Items[0];
   } catch (error) {
     console.error('Error getting users', error);
   }
@@ -247,8 +252,10 @@ const getDeliveryById = async (id) => {
    try {
      const data = await dynamodb.scan(params).promise();
      console.log('Deliveries:', data.Items);
+     return data.Items[0]
    } catch (error) {
      console.error('Error getting deliveries', error);
+     return new Error(error)
    }
  };
  
@@ -306,7 +313,6 @@ const getDeliveryById = async (id) => {
 // listDeliveries();
 
 
-getUserById(3);
 // getDeliveryById(467);
 
 
