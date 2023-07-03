@@ -37,15 +37,11 @@ const createUser = async (user) => {
     };
  
     try {
-       await dynamodb.put(params).promise();
-       console.log('Delivery created successfully.');
-
-       // Emit the deliveryInitiated event to notify connected clients
-      io.emit('deliveryInitiated', delivery);
-
-       return delivery
+      await dynamodb.put(params).promise();
+      console.log('Delivery created successfully.');
+      return delivery;
     } catch (error) {
-       console.error('Error creating delivery:', error);
+      console.error('Error creating delivery:', error);
     }
  };
 

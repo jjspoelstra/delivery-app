@@ -4,8 +4,6 @@ const cors = require('cors');
 const { graphqlHTTP } = require('express-graphql');
 const { buildSchema } = require('graphql');
 const resolvers = require('./resolvers');
-const socketIO = require('socket.io')
-
 
 
 // Define your schema
@@ -75,6 +73,9 @@ const schema = buildSchema(`
 
 const app = express();
 app.use(cors());
+
+
+
 app.use(
   '/graphql',
   graphqlHTTP({
@@ -90,32 +91,13 @@ app.use(
 
 
 
-// Socket.io
-const server = require('http').createServer(app)
-const io = socketIO(server)
-
-io.on('connection', (socket) => {
-  console.log('a client connected')
-  socket.on('disconnect', () => {
-    console.log('a client disconnected')
-  })
-
-  //example delivery initiation event:
-  socket.on('deliveryInitiated', (delivery) => {
-    // Perform necessary actions, such as updating the database or notifying other clients
-    console.log('Delivery initiated:', delivery);
-    // ... additional logic
-  });
-})
+// Assign the io instance to app for access in resolvers and other files
 
 
 const port = process.env.PORT || 4000;
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}/graphql`);
 });
-
-
-
 
 
 
