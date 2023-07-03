@@ -39,6 +39,10 @@ const createUser = async (user) => {
     try {
        await dynamodb.put(params).promise();
        console.log('Delivery created successfully.');
+
+       // Emit the deliveryInitiated event to notify connected clients
+      io.emit('deliveryInitiated', delivery);
+
        return delivery
     } catch (error) {
        console.error('Error creating delivery:', error);
@@ -322,8 +326,8 @@ module.exports = {
   createDelivery,
   getUserById,
   getDeliveryById,
-  updateUser,
-  updateDelivery,
+  // updateUser,
+  // updateDelivery,
   deleteUserById,
   deleteDeliveryById,
   listUsers,
