@@ -13,9 +13,7 @@ This project is meant to be a simple delivery app, to develop and practice skill
 
 ------ here
 
-6 - Since Kafka does not have a free tier, I will use Amazon SNS as a pub/sub messaging service - and implement the ability for real-time updates
-
-7 - Build a frontend with React for the user to interact with GraphQL API.
+6 - Build a frontend with React for the user to interact with GraphQL API.
 
 
 
@@ -24,6 +22,7 @@ Tech used: GraphQL, Node.js, Express.js, AWS EC2, AWS DynamoDB, Terraform
 
 # Optimizations
 So far, there is simply a baseline of tables for the API, for future projects - more thought could be given to what each table needs ahead of time rather than after. 
+The last step of this project, the front-end, is up next. 
 
 # Lessons Learned:
 So far, the most important lesson I've learned is to properly keep track of key pairs as an instance is created - having to create a new instance because the inital pair was not downloaded added a lot of extra time. 
